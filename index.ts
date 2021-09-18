@@ -7,12 +7,11 @@ import Container from "typedi";
 import express from "express";
 
 import { RedisPubSub } from "graphql-redis-subscriptions";
-//import * as Redis from "ioredis";
 
 const port = process.env.PORT || 3000
-const REDIS_HOST = "192.168.99.100"; // replace with own IP
-const REDIS_PORT = 6379;
-//const pubsub = new RedisPubSub();
+const REDIS_HOST = "redis://:p084e82949e443be46868bb05142b8b5443c90f2b55c954adbeec014ec7227672@ec2-52-5-212-47.compute-1.amazonaws.com:23120"; // replace with own IP
+const REDIS_PORT = 23120;
+
 
 import { TicTacToe } from "./src/graphql/resolvers/moduleTicToc/tictoc";
 
