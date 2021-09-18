@@ -9,7 +9,7 @@ import express from "express";
 import { RedisPubSub } from "graphql-redis-subscriptions";
 
 const port = process.env.PORT || 3000
-const REDIS_HOST = "redis://:p084e82949e443be46868bb05142b8b5443c90f2b55c954adbeec014ec7227672@ec2-52-5-212-47.compute-1.amazonaws.com:23120"; // replace with own IP
+const REDIS_HOST = "redis://:p084e82949e443be46868bb05142b8b5443c90f2b55c954adbeec014ec7227672@ec2-52-5-212-47.compute-1.amazonaws.com"; // replace with own IP
 const REDIS_PORT = 23120;
 
 
