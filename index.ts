@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
-//import RedisPubSubEngine from "graphql-ioredis-subscriptions";
 import IORedis from "ioredis";
 import { buildSchema } from "type-graphql";
 import Container from "typedi";
