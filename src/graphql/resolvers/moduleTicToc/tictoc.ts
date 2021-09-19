@@ -1,9 +1,10 @@
-import {Query,Resolver} from "type-graphql";
-import { Service } from "typedi";
-import { RedisPubSub } from 'graphql-redis-subscriptions';
 
-const pubsub = new RedisPubSub();
-const SOMETHING_CHANGED_TOPIC = 'something_changed';
+import RedisPubSubEngine from "graphql-ioredis-subscriptions";
+import { Redis } from "ioredis";
+import {Ctx, Mutation, Query,Resolver} from "type-graphql";
+import { Service } from "typedi";
+import { redisTest } from "../../../../redisUtils";
+//import { RedisPubSub } from 'graphql-redis-subscriptions';
 
 
 @Service({ global: true })
@@ -17,4 +18,5 @@ export class TicTacToe {
         return "toe"
 
     }
+   
 }
