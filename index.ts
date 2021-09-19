@@ -7,18 +7,26 @@ import { RedisPubSub } from "graphql-redis-subscriptions";
 import { RecipeResolver } from "./recipe.resolver";
 import IORedis from "ioredis";
 import { buildSchema } from "type-graphql";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const REDIS_HOST = "ec2-52-5-212-47.compute-1.amazonaws.com"; // replace with own IP
+const REDIS_HOST = process.env.REDIS_HOST; //   "ec2-52-5-212-47.compute-1.amazonaws.com"; // replace with own IP
 const REDIS_PORT = 6379;
-const REDIS_PASSWORD ="p084e82949e443be46868bb05142b8b5443c90f2b55c954adbeec014ec7227672"
-const REDIS_USER=""
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+const REDIS_USERNAME = process.env.REDIS_USERNAME;
+
+
+
+
+
+
+
 
 async function bootstrap() {
   // configure Redis connection options
   const options: IORedis.RedisOptions = {
     host: REDIS_HOST,
     port: REDIS_PORT,
-    password: REDIS_PASSWORD,
     
     retryStrategy: times => Math.max(times * 100, 3000),
   };
@@ -37,7 +45,14 @@ async function bootstrap() {
   });
 
   // Create GraphQL server
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer(
+      { 
+          schema,
+          
+
+      }
+      
+    );
 
   // Start the server
   const { url } = await server.listen(4000);
