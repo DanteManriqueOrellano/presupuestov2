@@ -27,6 +27,8 @@ async function bootstrap() {
   const options: IORedis.RedisOptions = {
     host: REDIS_HOST,
     port: REDIS_PORT,
+    db:0,
+    password:REDIS_PASSWORD,
     
     retryStrategy: times => Math.max(times * 100, 3000),
   };
