@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { ApolloServer } from "apollo-server";
+import "reflect-metadata";
+import { ApolloServer } from "apollo-server-express";
 
 import { RedisPubSub } from "graphql-redis-subscriptions";
 
@@ -12,7 +13,7 @@ import dotenv from 'dotenv';
 import express from "express";
 dotenv.config();
 const url = require('url');
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
 const redis_uri = url.parse(process.env.REDIS_URL);
 
@@ -52,6 +53,8 @@ async function bootstrap() {
   const server = new ApolloServer(
       { 
           schema,
+          introspection:true,
+          
           
 
       }
@@ -59,11 +62,17 @@ async function bootstrap() {
     );
 
   // Start the server
- // const { url } = await server.listen(4000);
- // console.log(`Server is running, GraphQL Playground available at ${url}`);
- app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  await server.start()
+  server.applyMiddleware({ app, path: '/joder', cors: true });
+
+  app.listen(PORT, () => {
+    console.log(
+      `🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`
+    );
+    console.log(
+      `🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`
+    );
+  });
 }
 
 bootstrap();
