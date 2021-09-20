@@ -9,12 +9,16 @@ import IORedis from "ioredis";
 
 import { buildSchema } from "type-graphql";
 import dotenv from 'dotenv';
+import express from "express";
 dotenv.config();
 const url = require('url');
+const port = process.env.PORT || 3000
 
 const redis_uri = url.parse(process.env.REDIS_URL);
+
 async function bootstrap() {
   // configure Redis connection options
+  const app = express()
   
   const options: IORedis.RedisOptions = {
     
@@ -55,8 +59,11 @@ async function bootstrap() {
     );
 
   // Start the server
-  const { url } = await server.listen(4000);
-  console.log(`Server is running, GraphQL Playground available at ${url}`);
+ // const { url } = await server.listen(4000);
+ // console.log(`Server is running, GraphQL Playground available at ${url}`);
+ app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
 }
 
 bootstrap();
