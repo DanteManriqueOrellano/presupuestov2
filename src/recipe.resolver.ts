@@ -25,7 +25,7 @@ import {
     private readonly recipes: Recipe[] = sampleRecipes.slice();
   
     @Query( ()=> Recipe, { nullable: true })
-    async recipe(@Arg("id", _type => ID) id: string) {
+    async recipe(@Arg("id" ) id: string) {
       return this.recipes.find(recipe => recipe.id === id);
     }
   

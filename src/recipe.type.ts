@@ -4,7 +4,7 @@ import { Comment } from "./comment.type";
 
 @ObjectType()
 export class Recipe {
-  @Field(_type => ID)
+  @Field()
   id: string;
 
   @Field()

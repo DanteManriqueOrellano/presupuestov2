@@ -4,7 +4,7 @@ import { Comment } from "./comment.type";
 
 @InputType()
 export class CommentInput implements Partial<Comment> {
-  @Field(_type => ID)
+  @Field()
   recipeId: string;
 
   @Field({ nullable: true })
