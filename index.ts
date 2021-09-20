@@ -1,16 +1,17 @@
 import "reflect-metadata";
-import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
-
 import { RedisPubSub } from "graphql-redis-subscriptions";
-
-
 import { RecipeResolver } from "./src/recipe.resolver";
 import IORedis from "ioredis";
-
 import { buildSchema } from "type-graphql";
 import dotenv from 'dotenv';
 import express from "express";
+const { 
+  ApolloServerPluginLandingPageProductionDefault,
+  ApolloServerPluginLandingPageLocalDefault,
+} = require('apollo-server-core');
+
+var cors = require('cors')
 dotenv.config();
 const url = require('url');
 const PORT = process.env.PORT || 3000
@@ -54,12 +55,25 @@ async function bootstrap() {
       { 
           schema,
           introspection:true,
+          plugins:[
+            process.env.NODE_ENV === 'production' ?
+            ApolloServerPluginLandingPageProductionDefault({ footer: false }) :
+            ApolloServerPluginLandingPageLocalDefault({ footer: false })
+          ]
           
           
 
       }
       
     );
+    app.use(cors({
+      
+      exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+      maxAge: 5,
+      credentials: true,
+      allowMethods: ['GET', 'POST', 'DELETE'],
+      allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    }));
 
   // Start the server
   await server.start()
