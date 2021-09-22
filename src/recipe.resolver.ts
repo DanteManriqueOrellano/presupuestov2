@@ -1,3 +1,4 @@
+import { PubSubEngine } from "graphql-subscriptions";
 import {
     Resolver,
     Query,
@@ -23,6 +24,7 @@ import {
   @Resolver()
   export class RecipeResolver {
     private readonly recipes: Recipe[] = sampleRecipes.slice();
+    private autoIncrement = 0;
   
     @Query( ()=> Recipe, { nullable: true })
     async recipe(@Arg("id" ) id: string) {
@@ -72,5 +74,8 @@ import {
         nickname: newComment.nickname,
       };
     }
+
+
+
+
   }
-  

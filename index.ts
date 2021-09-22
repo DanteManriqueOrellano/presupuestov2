@@ -6,6 +6,7 @@ import IORedis from "ioredis";
 import { buildSchema } from "type-graphql";
 import dotenv from 'dotenv';
 import express from "express";
+import { SampleResolver } from "./src/simple.resolver";
 const { 
   ApolloServerPluginLandingPageProductionDefault,
   ApolloServerPluginLandingPageLocalDefault,
@@ -30,24 +31,27 @@ async function bootstrap() {
     db: 0,
     tls: {
       rejectUnauthorized: false,
-      requestCert: false,
+      requestCert: true,
       
     }
+    
+    
   };
 
 
   // create Redis-based pub-sub
   const pubSub = new RedisPubSub({
-    publisher: new IORedis(options),
-    subscriber: new IORedis(options)
+    publisher: new IORedis(process.env.REDIS_URL, options),
+    subscriber: new IORedis(process.env.REDIS_URL,options)
     
   });
 
   // Build the TypeGraphQL schema
   const schema = await buildSchema({
-    resolvers: [RecipeResolver],
+    resolvers: [RecipeResolver,SampleResolver],
     validate: false,
     pubSub, // provide redis-based instance of PubSub
+    
   });
 
   // Create GraphQL server
@@ -59,10 +63,9 @@ async function bootstrap() {
             process.env.NODE_ENV === 'production' ?
             ApolloServerPluginLandingPageProductionDefault({ footer: false }) :
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
-          ]
-          
-          
-
+          ],
+          debug:true,
+         
       }
       
     );
@@ -78,6 +81,7 @@ async function bootstrap() {
   // Start the server
   await server.start()
   server.applyMiddleware({ app, path: '/joder', cors: true });
+  
 
   app.listen(PORT, () => {
     console.log(
