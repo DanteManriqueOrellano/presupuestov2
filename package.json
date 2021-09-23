@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@graphql-tools/schema": "^8.2.0",
+    "@types/ws": "^7.4.7",
     "apollo-server": "^3.3.0",
     "apollo-server-express": "^3.3.0",
     "bcrypt": "^5.0.1",
@@ -26,6 +28,7 @@
     "graphql-ioredis-subscriptions": "^1.0.17",
     "graphql-redis-subscriptions": "^2.4.0",
     "graphql-subscriptions": "^1.2.1",
+    "graphql-ws": "^5.5.0",
     "ioredis": "^4.27.9",
     "nodemon": "^2.0.12",
     "proposal-temporal": "^0.9.0",
@@ -33,7 +36,9 @@
     "reflect-metadata": "^0.1.13",
     "subscriptions-transport-ws": "^0.9.19",
     "type-graphql": "^1.1.1",
-    "typedi": "^0.10.0"
+    "typedi": "^0.10.0",
+    "ws": "^8.2.2",
+    "ws-redis": "^1.0.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

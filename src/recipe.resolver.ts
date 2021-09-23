@@ -1,4 +1,4 @@
-import { PubSubEngine } from "graphql-subscriptions";
+
 import {
     Resolver,
     Query,
@@ -8,7 +8,6 @@ import {
     Publisher,
     Subscription,
     Root,
-    ID,
     ResolverFilterData,
     Args,
   } from "type-graphql";

@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
-import { RedisPubSub } from "graphql-redis-subscriptions";
+import  RedisPubSubEngine   from "graphql-ioredis-subscriptions";
 import { RecipeResolver } from "./src/recipe.resolver";
 import IORedis from "ioredis";
 import { buildSchema } from "type-graphql";
@@ -29,7 +29,7 @@ async function bootstrap() {
     host: redis_uri.hostname,
     password: redis_uri.auth.split(':')[1],
     db: 0,
-    tls: {
+    tls: {//del sitio web de heroku
       rejectUnauthorized: false,
       requestCert: true,
       
@@ -40,10 +40,20 @@ async function bootstrap() {
 
 
   // create Redis-based pub-sub
-  const pubSub = new RedisPubSub({
-    publisher: new IORedis(process.env.REDIS_URL, options),
-    subscriber: new IORedis(process.env.REDIS_URL,options)
-    
+  const pubSub = new RedisPubSubEngine({
+    pub: new IORedis(process.env.REDIS_URL, options),
+    sub: new IORedis(process.env.REDIS_URL,options),
+    /* optional */
+    // defaults to JSON
+    parser: {
+      stringify: (val) => JSON.stringify(val),
+      parse: (str) => JSON.parse(str)
+    },
+    // defaults to console
+    logger: {
+      warn: (...args) => console.warn(...args),
+      error: (...args) => console.error(...args)
+    }
   });
 
   // Build the TypeGraphQL schema
@@ -65,6 +75,7 @@ async function bootstrap() {
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
           ],
           debug:true,
+          
          
       }
       
@@ -80,7 +91,7 @@ async function bootstrap() {
 
   // Start the server
   await server.start()
-  server.applyMiddleware({ app, path: '/joder', cors: true });
+  server.applyMiddleware({ app, path: '/apipresupuestov1', cors: true });
   
 
   app.listen(PORT, () => {
