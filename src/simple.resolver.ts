@@ -11,6 +11,7 @@ import {
   ResolverFilterData,
 } from "type-graphql";
 
+
 import { Notification, NotificationPayload } from "./notification.type";
 
 @Resolver()
