@@ -1,17 +1,12 @@
 <html>
-  <head>
-    
-    <script>
-      let socket = io();
-      let el;
-
-      socket.on('time', (timeString) => {
-        el = document.getElementById('server-time');
-        el.innerHTML = 'Server time: ' + timeString;
-      });
-    </script>
-  </head>
   <body>
-    <p id="server-time">hola</p>
+    <form ref='uploadForm' 
+      id='uploadForm' 
+      action='/upload' 
+      method='post' 
+      encType="multipart/form-data">
+        <input type="file" name="sampleFile" />
+        <input type='submit' value='Upload!' />
+    </form>     
   </body>
 </html>
