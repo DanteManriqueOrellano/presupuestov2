@@ -3,6 +3,7 @@ import { loadResolvers } from "./helper.graphql";
 import { pubSub } from "./redisUtils";
 import { ApolloServer } from "apollo-server-express";
 
+
 const { 
     ApolloServerPluginLandingPageProductionDefault,
     ApolloServerPluginLandingPageLocalDefault,
@@ -39,14 +40,14 @@ const appServerApollo = async (app:any)=>{
       await server.start()
       server.applyMiddleware({ app, path: '/apipresupuestov1', cors: true });
       
-      app.listen(PORT, () => {
+      /*app.listen(PORT, () => {
         console.log(
           `🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`
         );
         console.log(
           `🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`
         );
-      });
+      });*/
 
 
   }

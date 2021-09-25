@@ -1,35 +1,53 @@
 import "reflect-metadata";
-import express from "express";
-import appServerApollo from "./src/graphqlconfig";
-import { postUpload } from "./src/helper.files";
+import { ApolloServer } from "apollo-server";
+import Redis = require("ioredis");
+import { RedisPubSub } from "graphql-redis-subscriptions";
+import { buildSchema } from "type-graphql";
 
-const router = express.Router();
-const fileUpload = require('express-fileupload');
-var cors = require('cors')
+import { RecipeResolver } from "./recipe.resolver";
+
+const REDIS_HOST = "ec2-52-5-212-47.compute-1.amazonaws.com"; // replace with own IP
+const REDIS_PORT = 23120;
+const REDIS_PASSWORD = "p084e82949e443be46868bb05142b8b5443c90f2b55c954adbeec014ec7227672";
 
 async function bootstrap() {
-
-  const app = express()
-    app.use('/formUpload', express.static(__dirname + '/index.html'));
-    
-    app.use(fileUpload());
-    app.use(cors({
+  // configure Redis connection options
+  const options: Redis.RedisOptions = {
+    host: REDIS_HOST,
+    port: REDIS_PORT,
+    password: REDIS_PASSWORD,
+    retryStrategy: times => Math.max(times * 100, 3000),
+    tls: {
+      rejectUnauthorized: false,
+      requestCert: true,
       
-      exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-      maxAge: 5,
-      credentials: true,
-      allowMethods: ['GET', 'POST', 'DELETE'],
-      allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    }));
-    app.get('/ping', function(_req:any, res) {
       
-      res.send('pong');
-    });
-    
-    app.post('/upload', postUpload);
+    },
+    path:"https://presupuestov2.herokuapp.com"
+  };
 
-    app.use('/', router);
+  // create Redis-based pub-sub
+  const pubSub = new RedisPubSub({
+    publisher: new Redis(options),
+    subscriber: new Redis(options),
+  });
 
-  appServerApollo(app)
+  // Build the TypeGraphQL schema
+  const schema = await buildSchema({
+    resolvers: [RecipeResolver],
+    validate: false,
+    pubSub, // provide redis-based instance of PubSub
+
+  });
+
+  // Create GraphQL server
+  const server = new ApolloServer({ schema });
+  console.log(server.graphqlPath) 
+ 
+
+  // Start the server
+  const { url } = await server.listen(4000);
+  console.log(`Server is running, GraphQL Playground available at ${url}`);
 }
+
 bootstrap();
