@@ -23,7 +23,7 @@ async function bootstrap() {
       
       
     },
-    path:"https://presupuestov2.herokuapp.com"
+    //path:"https://presupuestov2.herokuapp.com/graphql"
   };
 
   // create Redis-based pub-sub
@@ -46,7 +46,10 @@ async function bootstrap() {
  
 
   // Start the server
-  const { url } = await server.listen(4000);
+  const { url } = await server.listen({
+    host: REDIS_HOST,
+    port: REDIS_PORT,
+    password: REDIS_PASSWORD});
   console.log(`Server is running, GraphQL Playground available at ${url}`);
 }
 
